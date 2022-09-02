@@ -4,6 +4,7 @@ import { useState } from "react";
 //  Internal Dependencies
 import { Cancel, Collapse, Confirm, Edit, Trash } from "../../assets/svgs";
 import MyTable from "../MyTable/MyTable";
+import MyInput from "../MyInput/MyInput";
 
 import ProjectProps from "./Project.types";
 import { ProjectContainer } from "./ProjectContainer.styled";
@@ -23,11 +24,13 @@ const Project = ({
   };
 
   const showButton = !isEditing ? (
-    <button className="btn btn-small btn-primary" onClick={(e) => onShowing()}>
+    <button className="btn btn-sm btn-primary" onClick={(e) => onShowing()}>
       <img src={Collapse} alt="" />
       Show
     </button>
   ) : null;
+
+  console.log(title);
 
   return (
     <ProjectContainer>
@@ -36,14 +39,14 @@ const Project = ({
         <div className="buttonPad">
           {showButton}
           <button
-            className="btn btn-small btn-primary"
+            className="btn btn-sm btn-primary"
             onClick={(e) => onEdit(data)}
           >
             <img src={Edit} alt="" />
             Edit
           </button>
           <button
-            className="btn btn-small btn-danger"
+            className="btn btn-sm btn-danger"
             onClick={(e) => onDelete(data)}
           >
             <img src={Trash} alt="" />
@@ -57,19 +60,19 @@ const Project = ({
           "project_content" + (isShowing || isEditing ? "" : " hidden_pad")
         }
       >
-        <MyTable expenses={expenses} />
+        <MyTable expenses={expenses} isEditing={isEditing} />
       </div>
       <hr className={!isEditing ? " hidden_pad" : ""} />
       <div className={"project_actions" + (!isEditing ? " hidden_pad" : "")}>
         <button
-          className="btn btn-small btn-primary"
+          className="btn btn-sm btn-primary"
           onClick={(e) => onSave(data)}
         >
           <img src={Confirm} alt="" />
           Confirm
         </button>
         <button
-          className="btn btn-small btn-danger"
+          className="btn btn-sm btn-danger"
           onClick={(e) => onCancel(data)}
         >
           <img src={Cancel} alt="" />

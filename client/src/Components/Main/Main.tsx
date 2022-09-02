@@ -1,17 +1,25 @@
 //  External Dependencies
-import React from "react";
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 //  Internal Dependencies
 import { MainContainer } from "./MainContainer.styled";
 import Project from "../Project/Project";
 import { ProjectData } from "../Global.types";
+import {
+  createProject,
+  updateProject,
+  deleteProject,
+  getProjects,
+} from "../../store/projectSlice";
 
 const Main = () => {
+  const dispatch = useDispatch();
   const fakeDatas: ProjectData[] = [
     {
       projectId: "project_id_1",
       title: "project_title_1",
-      isEditing: true,
+      isEditing: false,
       expenses: [
         {
           expenseId: "expense_1_1",
@@ -65,6 +73,7 @@ const Main = () => {
       ],
     },
   ];
+  const [isUpdated, setUpdated] = useState(false);
 
   const onSave = (data: ProjectData) => {
     console.log("Save: " + data.projectId);
@@ -80,6 +89,7 @@ const Main = () => {
 
   const onDelete = (data: ProjectData) => {
     console.log("Delete: ", data.projectId);
+    dispatch(deleteProject(data));
   };
 
   return (
