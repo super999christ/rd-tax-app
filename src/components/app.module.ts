@@ -11,7 +11,7 @@ import { ProjectSchema } from '../schemas/project.schema';
   imports: [
     ProjectModule,
     MongooseModule.forRoot(MONGODB_URI),
-    MongooseModule.forFeature([{ name: 'Project', schema: ProjectSchema }])
+    MongooseModule.forFeature([{ name: 'Project', schema: ProjectSchema }]),
   ],
   controllers: [AppController],
   providers: [AppService, ProjectService],
