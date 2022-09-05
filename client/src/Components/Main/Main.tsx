@@ -109,7 +109,6 @@ const Main = () => {
 
   //  When Click Delete button
   const onDelete = async (_id: string) => {
-    console.log('Delete: ', _id);
     if (window.confirm('Do you want to delete this project?')) {
       await dispatch(
         deleteProject({
@@ -123,7 +122,6 @@ const Main = () => {
 
   //  Handle the changes of title of project
   const onChangeTitle = async (data: string) => {
-    console.log(data);
     const project = store.getState().project.Project;
     const newData = {
       ...project,
@@ -135,13 +133,11 @@ const Main = () => {
 
   //  Handle the changes of expenses of project
   const onChangeExpenses = async (data: ExpenseTypes[]) => {
-    console.log(data);
     const project = store.getState().project.Project;
     const newData = {
       ...project,
       expenses: data,
     };
-    console.log(newData);
     await dispatch(setEditingContent(newData));
     setEditingData(newData);
   };

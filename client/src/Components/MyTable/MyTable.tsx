@@ -67,10 +67,7 @@ function MyTable({ expenses, isEditing, onChangeExpenses }: MyTableProps) {
   //  Click the Confirm button on Table
   const onConfirmEdit = async () => {
     let newDatas;
-    console.log(file);
     const fileId = await (await dispatch(uploadFile(file))).payload;
-
-    console.log(fileId);
 
     if (editingData._id === 'creating') {
       //  If it is Creating stage
@@ -96,7 +93,6 @@ function MyTable({ expenses, isEditing, onChangeExpenses }: MyTableProps) {
       isQualified: false,
       attachment: '',
     });
-    console.log('111');
     setCreating(false);
   };
 
@@ -151,7 +147,6 @@ function MyTable({ expenses, isEditing, onChangeExpenses }: MyTableProps) {
   };
 
   const content = datas.map((item, index) => {
-    // console.log(item);
     return (
       <tr key={item._id}>
         <td>{index + 1}</td>

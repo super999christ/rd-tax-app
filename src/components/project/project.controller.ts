@@ -74,7 +74,6 @@ export class ProjectController {
       body.expenseId,
       file.id,
     );
-    console.log(file);
     return file;
   }
 

@@ -94,7 +94,6 @@ export const uploadFile = createAsyncThunk(
   // async (file: File | undefined) => {
   async (file: File | undefined) => {
     if (file === undefined) return '';
-    console.log(file);
     const formData = new FormData();
     formData.append('file', file);
     const uploadedResult = await axios.post(
