@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import Moment from 'react-moment';
 
 //  Internal Dependencies
+import { SERVER_URL } from '../../consts';
+
 import { store } from '../../store/store';
 import { uploadFile } from '../../store/projectSlice';
 import { useAppDispatch } from '../../store/store';
@@ -15,8 +17,6 @@ import MyInput from '../MyInput/MyInput';
 import PDFUploader from '../PDFUploader/PDFUploader';
 
 import { Edit, Trash, Create, Confirm, Cancel } from '../../assets/svgs';
-
-const SERVER_URL = 'http://localhost:3000/api/project';
 
 function MyTable({ expenses, isEditing, onChangeExpenses }: MyTableProps) {
   const dispatch = useAppDispatch();
@@ -43,6 +43,7 @@ function MyTable({ expenses, isEditing, onChangeExpenses }: MyTableProps) {
 
   //  Click Create button on Table
   const onCreateExpense = () => {
+    setFile(undefined);
     setCreating(!isCreating);
     setEditingData({
       _id: `creating`,
@@ -95,6 +96,7 @@ function MyTable({ expenses, isEditing, onChangeExpenses }: MyTableProps) {
       isQualified: false,
       attachment: '',
     });
+    console.log('111');
     setCreating(false);
   };
 
@@ -105,10 +107,12 @@ function MyTable({ expenses, isEditing, onChangeExpenses }: MyTableProps) {
       if (
         window.confirm(`Another editing is in progress.\nDo you ignore it?`)
       ) {
+        setFile(undefined);
         setEditingData(selItem);
         setCreating(false);
       }
     } else {
+      setFile(undefined);
       setEditingData(selItem);
     }
   };

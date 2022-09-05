@@ -9,6 +9,7 @@ import {
   DeleteRequestProps,
   PutRequestProps,
 } from './types';
+import { SERVER_URL } from '../consts';
 
 const initialState: ProjectState = {
   isLoading: false,
@@ -19,8 +20,6 @@ const initialState: ProjectState = {
   },
   Projects: [],
 };
-
-const SERVER_URL = 'http://localhost:3000/api/project';
 
 //  Download the project data
 export const getProjects = createAsyncThunk(

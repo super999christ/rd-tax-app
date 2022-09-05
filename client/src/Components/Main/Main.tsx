@@ -148,51 +148,42 @@ const Main = () => {
 
   return (
     <MainContainer>
-      {isLoading ? (
-        <div className="loadingPane">Loading...</div>
-      ) : (
-        <>
-          <button
-            className="btn btn-lg btn-primary"
-            onClick={(e) => onCreate()}
-          >
-            Create Project
-          </button>
-          {isCreating === true ? (
-            <Project
-              key="creating"
-              data={store.getState().project.Project}
-              isEditing={true}
-              isCreating={true}
-              onSave={onSave}
-              onCancel={onCancel}
-              onEdit={onEdit}
-              onDelete={onDelete}
-              onChangeTitle={onChangeTitle}
-              onChangeExpenses={onChangeExpenses}
-            />
-          ) : null}
-          {datas.map((data: ProjectData) => {
-            return (
-              <Project
-                key={data._id}
-                data={
-                  editingData?._id === data._id
-                    ? store.getState().project.Project
-                    : data
-                }
-                isEditing={editingData?._id === data._id}
-                onSave={onSave}
-                onCancel={onCancel}
-                onEdit={onEdit}
-                onDelete={onDelete}
-                onChangeTitle={onChangeTitle}
-                onChangeExpenses={onChangeExpenses}
-              />
-            );
-          })}
-        </>
-      )}
+      <button className="btn btn-lg btn-primary" onClick={(e) => onCreate()}>
+        Create Project
+      </button>
+      {isCreating === true ? (
+        <Project
+          key="creating"
+          data={store.getState().project.Project}
+          isEditing={true}
+          isCreating={true}
+          onSave={onSave}
+          onCancel={onCancel}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          onChangeTitle={onChangeTitle}
+          onChangeExpenses={onChangeExpenses}
+        />
+      ) : null}
+      {datas.map((data: ProjectData) => {
+        return (
+          <Project
+            key={data._id}
+            data={
+              editingData?._id === data._id
+                ? store.getState().project.Project
+                : data
+            }
+            isEditing={editingData?._id === data._id}
+            onSave={onSave}
+            onCancel={onCancel}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            onChangeTitle={onChangeTitle}
+            onChangeExpenses={onChangeExpenses}
+          />
+        );
+      })}
     </MainContainer>
   );
 };
