@@ -1,4 +1,5 @@
-import styled from "styled-components";
+//  External Dependencies
+import styled from 'styled-components';
 
 export const ProjectContainer = styled.div`
   flex: 1;
@@ -18,10 +19,6 @@ export const ProjectContainer = styled.div`
     margin: 5px 0px 5px 0px;
   }
 
-  img {
-    margin-right: 5px;
-  }
-
   .hidden_pad {
     display: none !important;
   }
@@ -32,7 +29,7 @@ export const ProjectContainer = styled.div`
   }
 
   .project_header .titlePad {
-    font-family: "LibreFranklin";
+    font-family: 'LibreFranklin';
     font-size: 20pt;
   }
 
@@ -56,5 +53,15 @@ export const ProjectContainer = styled.div`
 
     align-items: center;
     justify-content: center;
+  }
+
+  .image-mr-2 {
+    margin-right: 5px;
+  }
+
+  @media (max-width: 550px) {
+    .responsive {
+      display: none;
+    }
   }
 `;

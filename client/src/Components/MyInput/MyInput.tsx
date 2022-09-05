@@ -1,14 +1,14 @@
 //  External Dependencies
-import React from "react";
+import React from 'react';
 
 //  Internal Dependencies
-import { MyInputContainer } from "./MyInputContainer.styled";
-import { MyInputProps } from "./MyInput.types";
+import { MyInputContainer } from './MyInputContainer.styled';
+import { MyInputProps } from './MyInput.types';
 
-const MyInput = ({ value, placeholder, onChange }: MyInputProps) => {
+const MyInput = ({ value, placeholder, onChange, type }: MyInputProps) => {
   return (
     <MyInputContainer
-      type="text"
+      type={type}
       placeholder={placeholder}
       value={value}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

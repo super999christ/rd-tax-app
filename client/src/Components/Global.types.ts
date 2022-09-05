@@ -1,14 +1,13 @@
 export interface ExpenseTypes {
-  expenseId: string;
-  amount: number;
-  created_at: Date;
-  is_qualified: Boolean;
-  attachment: undefined;
+  _id: string;
+  amount: string;
+  createdAt?: string;
+  isQualified: boolean;
+  attachment: string;
 }
 
 export interface ProjectData {
-  projectId: string;
+  _id: string;
   title: string;
   expenses: ExpenseTypes[];
-  isEditing: Boolean;
 }
