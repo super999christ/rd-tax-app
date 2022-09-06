@@ -1,6 +1,7 @@
 //  External Dependencies
 import { useState, useEffect } from 'react';
 import Moment from 'react-moment';
+import { useSelector } from 'react-redux';
 
 //  Internal Dependencies
 import { SERVER_URL } from '../../consts';
@@ -8,6 +9,7 @@ import { SERVER_URL } from '../../consts';
 import { store } from '../../store/store';
 import { uploadFile } from '../../store/projectSlice';
 import { useAppDispatch } from '../../store/store';
+import { selectUploadingState } from '../../store/selectors';
 
 import { MyTableProps } from './MyTable.types';
 import { ExpenseTypes } from '../Global.types';
@@ -18,7 +20,12 @@ import PDFUploader from '../PDFUploader/PDFUploader';
 
 import { Edit, Trash, Create, Confirm, Cancel } from '../../assets/svgs';
 
-function MyTable({ expenses, isEditing, onChangeExpenses }: MyTableProps) {
+function MyTable({
+  expenses,
+  isEditing,
+  onlyQualified,
+  onChangeExpenses,
+}: MyTableProps) {
   const dispatch = useAppDispatch();
   const [isCreating, setCreating] = useState(false);
   const [editingData, setEditingData] = useState<ExpenseTypes>({
@@ -30,6 +37,12 @@ function MyTable({ expenses, isEditing, onChangeExpenses }: MyTableProps) {
   const [datas, setDatas] = useState(expenses);
   const [file, setFile] = useState<File | undefined>();
   const editingProjectId = store.getState().project.Project._id;
+  const isUploading = useSelector(selectUploadingState());
+
+  useEffect(() => {
+    console.log('setData');
+    setDatas(expenses);
+  }, [isEditing]);
 
   useEffect(() => {
     setCreating(false);
@@ -67,7 +80,7 @@ function MyTable({ expenses, isEditing, onChangeExpenses }: MyTableProps) {
   //  Click the Confirm button on Table
   const onConfirmEdit = async () => {
     let newDatas;
-    const fileId = await (await dispatch(uploadFile(file))).payload;
+    let fileId = await (await dispatch(uploadFile(file))).payload;
 
     if (editingData._id === 'creating') {
       //  If it is Creating stage
@@ -79,6 +92,7 @@ function MyTable({ expenses, isEditing, onChangeExpenses }: MyTableProps) {
       newDatas = [newData, ...datas];
     } else {
       //  If it is Editing stage
+      if (fileId === '') fileId = editingData.attachment;
       const newData = { ...editingData, attachment: fileId };
       newDatas = datas.map((item) => {
         if (item._id === newData._id) return newData;
@@ -121,6 +135,7 @@ function MyTable({ expenses, isEditing, onChangeExpenses }: MyTableProps) {
         return false;
       });
       setDatas(newData);
+      onChangeExpenses(newData);
     }
   };
 
@@ -147,92 +162,101 @@ function MyTable({ expenses, isEditing, onChangeExpenses }: MyTableProps) {
   };
 
   const content = datas.map((item, index) => {
-    return (
-      <tr key={item._id}>
-        <td>{index + 1}</td>
-        <td>
-          <Moment date={item.createdAt} format="YYYY/MM/DD hh:mm:ss" />
-        </td>
-        <td>
-          {item._id === editingData._id ? (
-            <MyInput
-              value={editingData?.amount}
-              type="number"
-              placeholder="Amount"
-              onChange={setAmount}
-            />
-          ) : (
-            item.amount
-          )}
-        </td>
-        <td>
-          {item._id === editingData._id ? (
-            <input
-              type="checkbox"
-              checked={editingData?.isQualified}
-              onChange={(e) => setQualified(e.target.checked)}
-            />
-          ) : item.isQualified === true ? (
-            'Qualified'
-          ) : (
-            'Not Qualified'
-          )}
-        </td>
-        {item._id === editingData._id ? (
+    if (
+      (!isEditing && onlyQualified && item.isQualified) ||
+      isEditing ||
+      (!isEditing && !onlyQualified)
+    ) {
+      return (
+        <tr key={item._id}>
+          <td>{index + 1}</td>
           <td>
-            <PDFUploader fileName={item.attachment} setFile={setAttachment} />
+            <Moment date={item.createdAt} format="YYYY/MM/DD hh:mm:ss" />
           </td>
-        ) : (
           <td>
-            {item.attachment ? (
-              <button
-                className="btn btn-sm btn-info"
-                onClick={(e) => onViewFile(item.attachment)}
-              >
-                ViewFile
-              </button>
+            {item._id === editingData._id ? (
+              <MyInput
+                value={editingData?.amount}
+                type="number"
+                placeholder="Amount"
+                onChange={setAmount}
+              />
             ) : (
-              'No Attached Files'
+              Number(item.amount)
             )}
           </td>
-        )}
-        {isEditing ? (
-          item._id === editingData._id ? (
-            <td className="buttonPad">
-              <button
-                className="btn btn-sm btn-primary"
-                onClick={(e) => onConfirmEdit()}
-              >
-                <img src={Confirm} alt="" />
-              </button>
-              <button
-                className="btn btn-sm btn-danger"
-                onClick={(e) => onCancelEdit()}
-              >
-                <img src={Cancel} alt="" />
-              </button>
+          <td>
+            {item._id === editingData._id ? (
+              <input
+                type="checkbox"
+                checked={editingData?.isQualified}
+                onChange={(e) => setQualified(e.target.checked)}
+              />
+            ) : item.isQualified === true ? (
+              'Qualified'
+            ) : (
+              'Not Qualified'
+            )}
+          </td>
+          {item._id === editingData._id ? (
+            <td>
+              <PDFUploader fileName={item.attachment} setFile={setAttachment} />
             </td>
           ) : (
-            <td className="buttonPad">
-              <button
-                className="btn btn-sm btn-primary"
-                onClick={(e) => onEditExpense(item)}
-              >
-                <img src={Edit} alt="" />
-              </button>
-              <button
-                className="btn btn-sm btn-danger"
-                onClick={(e) => onDeleteExpense(item)}
-              >
-                <img src={Trash} alt="" />
-              </button>
+            <td>
+              {item.attachment ? (
+                <button
+                  className="btn btn-sm btn-info"
+                  onClick={(e) => onViewFile(item.attachment)}
+                >
+                  ViewFile
+                </button>
+              ) : (
+                'No Attached Files'
+              )}
             </td>
-          )
-        ) : null}
-      </tr>
-    );
+          )}
+          {isEditing ? (
+            item._id === editingData._id ? (
+              <td className="buttonPad">
+                <button
+                  className="btn btn-sm btn-primary"
+                  onClick={(e) => onConfirmEdit()}
+                >
+                  <img src={Confirm} alt="" />
+                </button>
+                <button
+                  className="btn btn-sm btn-danger"
+                  onClick={(e) => onCancelEdit()}
+                >
+                  <img src={Cancel} alt="" />
+                </button>
+              </td>
+            ) : (
+              <td className="buttonPad">
+                <button
+                  className="btn btn-sm btn-primary"
+                  onClick={(e) => onEditExpense(item)}
+                >
+                  <img src={Edit} alt="" />
+                </button>
+                <button
+                  className="btn btn-sm btn-danger"
+                  onClick={(e) => onDeleteExpense(item)}
+                >
+                  <img src={Trash} alt="" />
+                </button>
+              </td>
+            )
+          ) : null}
+        </tr>
+      );
+    }
+    return false;
   });
-  return (
+  return isUploading ? (
+    <span>Uploading files</span>
+  ) : (
     <MyTableContainer>
       <thead>
         <tr>

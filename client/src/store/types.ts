@@ -3,6 +3,7 @@ import { ProjectData } from '../Components/Global.types';
 
 export interface ProjectState {
   isLoading: Boolean;
+  isUploading: Boolean;
   Project: ProjectData;
   Projects: ProjectData[];
 }

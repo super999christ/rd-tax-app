@@ -24,16 +24,38 @@ import { selectProjectsState, selectLoadingState } from '../../store/selectors';
 const PAGE_SIZE = 5;
 const startPage = 0;
 
+//  Get Total Amount
+const GetTotalAmount = (checked: boolean) => {
+  const projects = store.getState().project.Projects;
+  let total = 0;
+  projects.forEach((project) => {
+    let subTotal = 0;
+    project.expenses.forEach((expense: ExpenseTypes) => {
+      subTotal +=
+        (checked && expense.isQualified) || !checked
+          ? Number(expense.amount)
+          : 0;
+      return expense;
+    });
+    total += subTotal;
+    return project;
+  });
+  return total;
+};
+
 const Main = () => {
   const dispatch = useAppDispatch();
   const [editingData, setEditingData] = useState<ProjectData>();
   const [isCreating, setCreating] = useState(false);
+  const [checked, setChecked] = useState(false);
+  const [totalAmount, setTotalAmount] = useState(GetTotalAmount(checked));
 
   const datas = useSelector(selectProjectsState());
-  const isLoading = useSelector(selectLoadingState());
+  // const isLoading = useSelector(selectLoadingState());
 
   useEffect(() => {
     dispatch(getProjects({ startPage: startPage, pageSize: PAGE_SIZE }));
+    setTotalAmount(GetTotalAmount(checked));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   //  When Click Confirm button on Edit or Create Project
@@ -60,6 +82,7 @@ const Main = () => {
         }),
       );
     }
+    await dispatch(onCancelEditing());
     setEditingData({
       _id: '',
       title: '',
@@ -71,13 +94,18 @@ const Main = () => {
   //  When Click Cancel button on Edit or Create Project
   const onCancel = async () => {
     await dispatch(onCancelEditing());
-    setEditingData(store.getState().project.Project);
+    setEditingData({
+      _id: '',
+      title: '',
+      expenses: [],
+    });
     setCreating(false);
   };
 
   //  When Click Edit button
   const onEdit = async (data: ProjectData) => {
     const project = store.getState().project.Project;
+    // console.log(project);
     if (project._id !== '' || isCreating) {
       if (
         window.confirm(
@@ -133,6 +161,7 @@ const Main = () => {
 
   //  Handle the changes of expenses of project
   const onChangeExpenses = async (data: ExpenseTypes[]) => {
+    console.log(data);
     const project = store.getState().project.Project;
     const newData = {
       ...project,
@@ -142,8 +171,42 @@ const Main = () => {
     setEditingData(newData);
   };
 
+  //  Handle the changes of showOnlyQualified
+  const onToggleQualified = async (data: boolean) => {
+    setChecked(data);
+    const total = GetTotalAmount(data);
+    setTotalAmount(total);
+  };
+
+  const content = datas.map((data: ProjectData) => {
+    // console.log(data._id, editingData?._id);
+    return (
+      <Project
+        key={data._id}
+        data={editingData?._id === data._id ? editingData : data}
+        isEditing={editingData?._id === data._id}
+        onlyQualified={checked}
+        onSave={onSave}
+        onCancel={onCancel}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        onChangeTitle={onChangeTitle}
+        onChangeExpenses={onChangeExpenses}
+      />
+    );
+  });
+
   return (
     <MainContainer>
+      <div>
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={(e) => onToggleQualified(e.target.checked)}
+        />{' '}
+        <span className="text-white">Only Qualified</span>
+      </div>
+      <div className="text-white">{`Total Amount: ${totalAmount}`}</div>
       <button className="btn btn-lg btn-primary" onClick={(e) => onCreate()}>
         Create Project
       </button>
@@ -153,6 +216,7 @@ const Main = () => {
           data={store.getState().project.Project}
           isEditing={true}
           isCreating={true}
+          onlyQualified={checked}
           onSave={onSave}
           onCancel={onCancel}
           onEdit={onEdit}
@@ -161,25 +225,7 @@ const Main = () => {
           onChangeExpenses={onChangeExpenses}
         />
       ) : null}
-      {datas.map((data: ProjectData) => {
-        return (
-          <Project
-            key={data._id}
-            data={
-              editingData?._id === data._id
-                ? store.getState().project.Project
-                : data
-            }
-            isEditing={editingData?._id === data._id}
-            onSave={onSave}
-            onCancel={onCancel}
-            onEdit={onEdit}
-            onDelete={onDelete}
-            onChangeTitle={onChangeTitle}
-            onChangeExpenses={onChangeExpenses}
-          />
-        );
-      })}
+      {content}
     </MainContainer>
   );
 };

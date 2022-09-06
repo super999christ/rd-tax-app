@@ -13,6 +13,7 @@ import { SERVER_URL } from '../consts';
 
 const initialState: ProjectState = {
   isLoading: false,
+  isUploading: false,
   Project: {
     _id: '',
     title: '',
@@ -72,6 +73,7 @@ export const createProject = createAsyncThunk(
 export const updateProject = createAsyncThunk(
   '/project/update',
   async ({ data, startPage, pageSize }: PutRequestProps) => {
+    console.log(data);
     const processedData = data;
     processedData.expenses.forEach((item) => {
       if (item._id.includes('create')) {
@@ -123,10 +125,12 @@ export const projectSlice = createSlice({
         };
       } else state.Project = payload;
     },
+
     //  Save Editing data
     setEditingContent: (state, { payload }) => {
       state.Project = payload;
     },
+
     //  Clear the Editing Project
     onCancelEditing: (state) => {
       state.Project = {
@@ -136,6 +140,7 @@ export const projectSlice = createSlice({
       };
     },
   },
+
   extraReducers: (builder) => {
     builder.addCase(getProjects.pending, (state, action) => {
       state.isLoading = true;
@@ -192,13 +197,13 @@ export const projectSlice = createSlice({
     });
 
     builder.addCase(uploadFile.pending, (state, action) => {
-      state.isLoading = true;
+      state.isUploading = true;
     });
     builder.addCase(uploadFile.fulfilled, (state, action) => {
-      state.isLoading = false;
+      state.isUploading = false;
     });
     builder.addCase(uploadFile.rejected, (state, action) => {
-      state.isLoading = false;
+      state.isUploading = false;
     });
   },
 });

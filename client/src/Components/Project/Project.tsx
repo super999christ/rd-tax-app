@@ -12,6 +12,7 @@ const Project = ({
   data,
   isEditing,
   isCreating = false,
+  onlyQualified,
   onSave,
   onCancel,
   onEdit,
@@ -80,6 +81,7 @@ const Project = ({
         <MyTable
           expenses={expenses}
           isEditing={isEditing}
+          onlyQualified={onlyQualified}
           onChangeExpenses={onChangeExpenses}
         />
       </div>

@@ -5,6 +5,7 @@ interface ProjectProps {
   data: ProjectData;
   isEditing: Boolean;
   isCreating?: Boolean;
+  onlyQualified: Boolean;
   onSave: Function;
   onCancel: Function;
   onEdit: Function;
