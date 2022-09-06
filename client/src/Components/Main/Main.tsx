@@ -19,7 +19,7 @@ import {
   setEditingContent,
   onCancelEditing,
 } from '../../store/projectSlice';
-import { selectProjectsState, selectLoadingState } from '../../store/selectors';
+import { selectProjectsState } from '../../store/selectors';
 
 const PAGE_SIZE = 5;
 const startPage = 0;
@@ -105,7 +105,6 @@ const Main = () => {
   //  When Click Edit button
   const onEdit = async (data: ProjectData) => {
     const project = store.getState().project.Project;
-    // console.log(project);
     if (project._id !== '' || isCreating) {
       if (
         window.confirm(
@@ -161,7 +160,6 @@ const Main = () => {
 
   //  Handle the changes of expenses of project
   const onChangeExpenses = async (data: ExpenseTypes[]) => {
-    console.log(data);
     const project = store.getState().project.Project;
     const newData = {
       ...project,
@@ -179,7 +177,6 @@ const Main = () => {
   };
 
   const content = datas.map((data: ProjectData) => {
-    // console.log(data._id, editingData?._id);
     return (
       <Project
         key={data._id}

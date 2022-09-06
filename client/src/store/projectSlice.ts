@@ -9,7 +9,7 @@ import {
   DeleteRequestProps,
   PutRequestProps,
 } from './types';
-import { SERVER_URL } from '../consts';
+import { SERVER_URL } from '../constant/constant';
 
 const initialState: ProjectState = {
   isLoading: false,
@@ -73,7 +73,6 @@ export const createProject = createAsyncThunk(
 export const updateProject = createAsyncThunk(
   '/project/update',
   async ({ data, startPage, pageSize }: PutRequestProps) => {
-    console.log(data);
     const processedData = data;
     processedData.expenses.forEach((item) => {
       if (item._id.includes('create')) {

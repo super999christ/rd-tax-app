@@ -4,7 +4,7 @@ import Moment from 'react-moment';
 import { useSelector } from 'react-redux';
 
 //  Internal Dependencies
-import { SERVER_URL } from '../../consts';
+import { SERVER_URL } from '../../constant/constant';
 
 import { store } from '../../store/store';
 import { uploadFile } from '../../store/projectSlice';
@@ -40,8 +40,8 @@ function MyTable({
   const isUploading = useSelector(selectUploadingState());
 
   useEffect(() => {
-    console.log('setData');
     setDatas(expenses);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditing]);
 
   useEffect(() => {
