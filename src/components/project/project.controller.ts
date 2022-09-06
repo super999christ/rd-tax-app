@@ -86,7 +86,7 @@ export class ProjectController {
     const docStream = await this.projectService.viewDocument(query.docId);
     res.set({
       'Content-Type': 'application/pdf',
-      'Content-Disposition': 'attachment; filename="document.pdf"',
+      'Content-Disposition': 'inline; filename="document.pdf"',
     });
     return docStream;
   }

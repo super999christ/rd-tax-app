@@ -1,18 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class GetProjectsRequest {
-  @ApiProperty({ type: Number })
+  @ApiProperty({ type: Number, required: false })
   startPage: number;
 
-  @ApiProperty({ type: Number })
+  @ApiProperty({ type: Number, required: false })
   pageSize: number;
 }
 
 export class UploadDocumentRequest {
-  @ApiProperty({ type: String })
+  @ApiProperty({ type: String, required: false })
   projectId: string;
 
-  @ApiProperty({ type: String })
+  @ApiProperty({ type: String, required: false })
   expenseId: string;
 
   @ApiProperty({ type: String, format: 'binary' })
@@ -25,7 +25,7 @@ export class DownloadDocumentRequest {
 }
 
 export class ExpenseDocument {
-  @ApiProperty({ type: String })
+  @ApiProperty({ type: String, required: false })
   _id: any;
 
   @ApiProperty({ type: Boolean })
@@ -34,18 +34,19 @@ export class ExpenseDocument {
   @ApiProperty({ type: Number })
   amount: number;
 
-  @ApiProperty({ type: String })
+
+  @ApiProperty({ type: String, required: false })
   docId: string;
 
-  @ApiProperty({ type: Date })
+  @ApiProperty({ type: Date, required: false })
   createdAt: Date;
 
-  @ApiProperty({ type: Date })
+  @ApiProperty({ type: Date, required: false })
   updatedAt: Date;
 }
 
 export class ProjectDocument {
-  @ApiProperty({ type: String })
+  @ApiProperty({ type: String, required: false })
   _id: any;
 
   @ApiProperty({ type: String })
@@ -56,36 +57,15 @@ export class ProjectDocument {
 }
 
 export class FileInfo {
-  @ApiProperty({ type: String })
   fieldname: string;
-
-  @ApiProperty({ type: String })
   originalname: string;
-
-  @ApiProperty({ type: String })
   encoding: string;
-
-  @ApiProperty({ type: String })
   mimetype: string;
-
-  @ApiProperty({ type: String })
   id: string;
-
-  @ApiProperty({ type: String })
   filename: string;
-
-  @ApiProperty({ type: String })
   bucketName: string;
-
-  @ApiProperty({ type: Number })
   chunkSize: number;
-
-  @ApiProperty({ type: Number })
   size: number;
-
-  @ApiProperty({ type: String })
   uploadDate: string;
-
-  @ApiProperty({ type: String })
   contentType: string;
 }
