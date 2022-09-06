@@ -55,8 +55,11 @@ const Main = () => {
 
   useEffect(() => {
     dispatch(getProjects({ startPage: startPage, pageSize: PAGE_SIZE }));
-    setTotalAmount(GetTotalAmount(checked));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    setTotalAmount(GetTotalAmount(checked));
+  }, [datas, checked]);
 
   //  When Click Confirm button on Edit or Create Project
   const onSave = async () => {
@@ -203,7 +206,7 @@ const Main = () => {
         />{' '}
         <span className="text-white">Only Qualified</span>
       </div>
-      <div className="text-white">{`Total Amount: ${totalAmount}`}</div>
+      <div className="text-white">{`Total Amount: $${totalAmount}`}</div>
       <button className="btn btn-lg btn-primary" onClick={(e) => onCreate()}>
         Create Project
       </button>
