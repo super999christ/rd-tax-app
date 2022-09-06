@@ -34,6 +34,7 @@ export class ExpenseDocument {
   @ApiProperty({ type: Number })
   amount: number;
 
+
   @ApiProperty({ type: String, required: false })
   docId: string;
 
