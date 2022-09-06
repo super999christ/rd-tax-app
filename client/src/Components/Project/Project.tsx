@@ -27,6 +27,15 @@ const Project = ({
     setShowing(!isShowing);
   };
 
+  let totalAmount = 0;
+  expenses.forEach((expense) => {
+    totalAmount +=
+      (onlyQualified && expense.isQualified) || !onlyQualified
+        ? Number(expense.amount)
+        : 0;
+    return totalAmount;
+  });
+
   const showButton = !isEditing ? (
     <button className="btn btn-sm btn-primary" onClick={(e) => onShowing()}>
       <img className="image-mr-2" src={Collapse} alt="" />
@@ -63,7 +72,7 @@ const Project = ({
               onChange={onChangeTitle}
             />
           ) : (
-            title
+            `${title} - $${totalAmount}`
           )}
         </div>
         <div className="buttonPad">
